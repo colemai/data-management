@@ -20,7 +20,7 @@ f = open(argv[1])
 csv_f = csv.reader(f)
 
 for row in csv_f:
-    mysql_cursor.execute("""INSERT INTO Iano (col1, col2, col3) VALUES(%s, %s, %s)""",
+    mysql_cursor.execute("""INSERT INTO Species (col1, col2, col3) VALUES(%s, %s, %s)""",
                          (row[0], row[1], row[2]))
 
 mysql_conn.commit()
