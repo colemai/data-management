@@ -14,6 +14,7 @@ import pandas as pd
 import os
 import glob
 
+
 def intake_csv_files(csv_path):
 	"""
 	Input: Seed csv in the original format 
@@ -37,6 +38,7 @@ def output_data_with_pandas(input_df):
 	output_df['nameLatin'] = input_df['Soort']
 	output_df['pricePerBag'] = input_df['Prijs']
 	output_df.to_csv('output-csvs/species.csv', index=False)
+	input_df.to_csv('master.csv', index=False)
 
 if __name__ == "__main__":
 	df2 = intake_csv_files(argv[1])

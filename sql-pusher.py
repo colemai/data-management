@@ -11,17 +11,52 @@ Effect:
 import csv
 import MySQLdb
 from sys import argv
+from mysql.connector import MySQLConnection, Error
+from python_mysql_dbconfig import read_db_config
 
-mysql_conn = MySQLdb.connect(host=argv[2], user=argv[3], 
-                             passwd=argv[4], db=argv[5])
-mysql_cursor = mysql_conn.cursor()
+def intake_master_csv(csv_path):
+	"""
+	"""
+	with open(csv_path) as csver:
+		df = pd.read_csv(csver)
+	return df
 
-f = open(argv[1])
-csv_f = csv.reader(f)
+def insert_data(books):
+	query = "INSERT INTO Species(nameLatin) " \
+			"VALUES(%s)"
+ 
+	try:
+		mysql_conn = MySQLdb.connect(host=argv[2], user=argv[3], 
+								 passwd=argv[4], db=argv[5])
+		cursor = mysql_conn.cursor()
+		cursor.executemany(query, books)
+ 
+		conn.commit()
+	except Error as e:
+		print('Error:', e)
+ 
+	finally:
+		cursor.close()
+		conn.close()
+ 
+def main(df):
+	data = df['nameLatin']
+	insert_data(data)
 
-for row in csv_f:
-    mysql_cursor.execute("""INSERT INTO Species (col1, col2, col3) VALUES(%s, %s, %s)""",
-                         (row[0], row[1], row[2]))
+if __name__ is "__main__":
+	df = intake_master_csv(argv[1])
+	main(df)
 
-mysql_conn.commit()
-mysql_cursor.close()
+	mysql_conn = MySQLdb.connect(host=argv[2], user=argv[3], 
+								 passwd=argv[4], db=argv[5])
+	mysql_cursor = mysql_conn.cursor()
+
+	f = open(argv[1])
+	csv_f = csv.reader(f)
+
+	for row in csv_f:
+		mysql_cursor.execute("""INSERT INTO Species (col1, col2, col3) VALUES(%s, %s, %s)""",
+							 (row[0], row[1], row[2]))
+
+	mysql_conn.commit()
+	mysql_cursor.close()
