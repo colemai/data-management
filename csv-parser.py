@@ -4,7 +4,6 @@ Author: Ian Coleman
 Example call: python csv-parser.py csv_folder
 Input: path to folder with all csv files
 Output: Other CSV Files
-
 """
 
 from sys import argv
